@@ -23,6 +23,7 @@ namespace XMusic;
 
 public partial class MainWindow : Window
 {
+    bool isRepeatButtonOn = false;
     public MainWindow()
     {
         InitializeComponent();
@@ -72,19 +73,21 @@ public partial class MainWindow : Window
     {
         RepeatAllButton.Visibility = Visibility.Hidden;
         Repeat1Button.Visibility = Visibility.Visible;
+        isRepeatButtonOn = true;
     }
 
     private void Repeat1Button_Click(object sender, RoutedEventArgs e)
     {
         RepeatAllButton.Visibility = Visibility.Visible;
         Repeat1Button.Visibility = Visibility.Hidden;
-
+        isRepeatButtonOn = false;
     }
 
     private void ShuffleButton_Click(object sender, RoutedEventArgs e)
     {
         ShuffleButton.Visibility = Visibility.Hidden;
         ShuffleOffButton.Visibility = Visibility.Visible;
+        // ShuffleOn();
     }
 
     private void ShuffleButtonOff_Click(object sender, RoutedEventArgs e)
@@ -109,6 +112,28 @@ public partial class MainWindow : Window
         ImageBox.Visibility = Visibility.Hidden;
         Lsongs.Visibility = Visibility.Visible;
     }
+
+    private void Media_MediaOpened(object sender, RoutedEventArgs e)
+    {
+        Label2.Content = media.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
+    }
+
+    private void Media_MediaEnded(object sender, RoutedEventArgs e)
+    {
+        if (isRepeatButtonOn)
+        {
+            ChoiceSong();
+        }
+        else
+        {
+            Forward();
+        }
+    }
+
+
+
+
+
 
 
     private void ChoiceDir()
@@ -216,15 +241,34 @@ public partial class MainWindow : Window
     {
         DispatcherTimer timer = new DispatcherTimer();
         timer.Interval = TimeSpan.FromSeconds(1);
-        timer.Tick += timer_Tick;
+        timer.Tick += timerTick;
         timer.Start();
     }
 
-    void timer_Tick(object sender, EventArgs e)
+    private void timerTick(object sender, EventArgs e)
     {
-
         Label1.Content = media.Position.ToString(@"mm\:ss");
-        Label2.Content = media.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
     }
 
+    /*private void ShuffleOn()
+    {
+        Random rand = new Random();
+        for (int i = songsList.Count - 1; i > 0; i--)
+        {
+            int a = rand.Next(i);
+            string tr = songsList[i];
+            songsList[i] = songsList[a];
+            songsList[a] = tr;
+        }
+
+        media.Stop();
+        Lsongs.Items.Clear();
+        foreach (var song in songsList)
+        {
+            Lsongs.Items.Add(System.IO.Path.GetFileName(song));
+        }
+        Lsongs.SelectedIndex = 0;
+        media.Source = new Uri(songsList[0]);
+        Play();
+    }*/
 }
