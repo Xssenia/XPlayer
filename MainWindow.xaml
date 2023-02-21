@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:XMusic"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" 
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="660">
@@ -38,21 +37,37 @@
         <Border
             x:Name="Border"
             Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="12"
-            Background="#85CDFD"
+            Background="#BFDCE5"
             CornerRadius="5"/>
         <Image
             x:Name="ImageBox"
-            Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="11"
+            Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="11" 
             Source="Img.png" Margin="0,20,50,70" />
         <ListBox
             x:Name="Lsongs"
             Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="12"
-            Background="#85CDFD" SelectionChanged="Lsongs_SelectionChanged">
+            Background="#BFDCE5" SelectionChanged="Lsongs_SelectionChanged">
             Выберите папку
         </ListBox>
+        <Border Grid.Column="1" Grid.Row="2" Background="#85CDFD" CornerRadius="3" Margin="5"/>
+        <Label
+            x:Name="Label1"
+            Grid.Column="1" Grid.Row="2"
+            HorizontalContentAlignment="Center"
+            Background="#85CDFD" 
+            Foreground="Black"
+            Margin="7,7,7,5"/>
+        <Border Grid.Column="12" Grid.Row="2" Background="#85CDFD" CornerRadius="3" Margin="5"/>
+        <Label 
+            x:Name="Label2"
+            HorizontalContentAlignment="Center"
+            Grid.Column="12" Grid.Row="2"
+            Background="#85CDFD" 
+            Foreground="Black"
+            Margin="7,7,7,5"/>
         <Slider
             x:Name="TreckSlider"
-            Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="12"
+            Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="10"
             Foreground="#85CDFD"
             VerticalAlignment="Center"/>
         <ui:Button 

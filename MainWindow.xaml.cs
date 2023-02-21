@@ -14,8 +14,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 
 namespace XMusic;
 
@@ -115,6 +117,7 @@ public partial class MainWindow : Window
 
         CommonOpenFileDialog dialog = new() { IsFolderPicker = true };
         CommonFileDialogResult result = dialog.ShowDialog();
+
         if (result == CommonFileDialogResult.Ok)
         {
             files = Directory.GetFiles(dialog.FileName);
@@ -146,6 +149,7 @@ public partial class MainWindow : Window
         media.Play();
 
         ShowImg();
+        ShowTime();
     }
 
     private void ShowImg()
@@ -207,4 +211,20 @@ public partial class MainWindow : Window
             ChoiceSong();
         }
     }
+
+    private void ShowTime()
+    {
+        DispatcherTimer timer = new DispatcherTimer();
+        timer.Interval = TimeSpan.FromSeconds(1);
+        timer.Tick += timer_Tick;
+        timer.Start();
+    }
+
+    void timer_Tick(object sender, EventArgs e)
+    {
+
+        Label1.Content = media.Position.ToString(@"mm\:ss");
+        Label2.Content = media.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
+    }
+
 }
