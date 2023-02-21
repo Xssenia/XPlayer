@@ -35,10 +35,19 @@
         <MediaElement
             x:Name="media"
             LoadedBehavior="Manual"/>
+        <Border
+            x:Name="Border"
+            Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="12"
+            Background="#85CDFD"
+            CornerRadius="5"/>
+        <Image
+            x:Name="ImageBox"
+            Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="11"
+            Source="Img.png" Margin="0,20,50,70" />
         <ListBox
             x:Name="Lsongs"
             Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="12"
-            Background="#BFDCE5" SelectionChanged="Lsongs_SelectionChanged">
+            Background="#85CDFD" SelectionChanged="Lsongs_SelectionChanged">
             Выберите папку
         </ListBox>
         <Slider
