@@ -41,7 +41,7 @@ public partial class MainWindow : Window
     private void СhoiceDirButton_Click(object sender, RoutedEventArgs e)
     {
         ChoiceDir();
-        
+
     }
 
     private void Lsongs_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -87,7 +87,7 @@ public partial class MainWindow : Window
     {
         ShuffleButton.Visibility = Visibility.Hidden;
         ShuffleOffButton.Visibility = Visibility.Visible;
-        // ShuffleOn();
+        ShuffleOn();
     }
 
     private void ShuffleButtonOff_Click(object sender, RoutedEventArgs e)
@@ -102,7 +102,7 @@ public partial class MainWindow : Window
         TreckButton.Visibility = Visibility.Visible;
         Lsongs.Visibility = Visibility.Hidden;
         ImageBox.Visibility = Visibility.Visible;
-        
+
     }
 
     private void TreckButton_Click(object sender, RoutedEventArgs e)
@@ -163,8 +163,11 @@ public partial class MainWindow : Window
 
     private void ChoiceSong()
     {
-        media.Source = new Uri(songsList[Lsongs.SelectedIndex]);
-        Play();
+        if (Lsongs.SelectedIndex != -1)
+        {
+            media.Source = new Uri(songsList[Lsongs.SelectedIndex]);
+            Play();
+        }
     }
 
     private void Play()
@@ -184,7 +187,7 @@ public partial class MainWindow : Window
             TagLib.File song = new TagLib.Mpeg.AudioFile(songsList[Lsongs.SelectedIndex]);
             TagLib.IPicture img = song.Tag.Pictures[0];
             MemoryStream memStream = new(img.Data.Data);
-            
+
             BitmapImage bi = new();
             bi.BeginInit();
             bi.StreamSource = memStream;
@@ -229,7 +232,7 @@ public partial class MainWindow : Window
             Lsongs.SelectedIndex = Lsongs.Items.Count - 1;
             ChoiceSong();
         }
-        else 
+        else
         {
             media.Stop();
             Lsongs.SelectedIndex -= 1;
@@ -250,25 +253,26 @@ public partial class MainWindow : Window
         Label1.Content = media.Position.ToString(@"mm\:ss");
     }
 
-    /*private void ShuffleOn()
+    private void ShuffleOn()
     {
-        Random rand = new Random();
+
+        Random rnd = new Random();
         for (int i = songsList.Count - 1; i > 0; i--)
         {
-            int a = rand.Next(i);
-            string tr = songsList[i];
-            songsList[i] = songsList[a];
-            songsList[a] = tr;
+            int rn = rnd.Next(i);
+            (songsList[i], songsList[rn]) = (songsList[rn], songsList[i]);
         }
 
+        List<string> shuffled = songsList.ToList();
         media.Stop();
         Lsongs.Items.Clear();
-        foreach (var song in songsList)
+
+
+        foreach (var song in shuffled)
         {
             Lsongs.Items.Add(System.IO.Path.GetFileName(song));
         }
         Lsongs.SelectedIndex = 0;
-        media.Source = new Uri(songsList[0]);
         Play();
-    }*/
+    }
 }
