@@ -94,6 +94,7 @@ public partial class MainWindow : Window
     {
         ShuffleButton.Visibility = Visibility.Visible;
         ShuffleOffButton.Visibility = Visibility.Hidden;
+        ShuffleOff();
     }
 
     private void СhoiceTreckButton_Click(object sender, RoutedEventArgs e)
@@ -129,10 +130,6 @@ public partial class MainWindow : Window
             Forward();
         }
     }
-
-
-
-
 
 
 
@@ -267,8 +264,20 @@ public partial class MainWindow : Window
         media.Stop();
         Lsongs.Items.Clear();
 
-
         foreach (var song in shuffled)
+        {
+            Lsongs.Items.Add(System.IO.Path.GetFileName(song));
+        }
+        Lsongs.SelectedIndex = 0;
+        Play();
+    }
+
+    private void ShuffleOff()
+    {
+        media.Stop();
+        Lsongs.Items.Clear();
+        songsList.Sort();
+        foreach (var song in songsList)
         {
             Lsongs.Items.Add(System.IO.Path.GetFileName(song));
         }
