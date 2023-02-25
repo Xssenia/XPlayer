@@ -24,6 +24,7 @@ namespace XMusic;
 public partial class MainWindow : Window
 {
     bool isRepeatButtonOn = false;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -117,6 +118,7 @@ public partial class MainWindow : Window
     private void Media_MediaOpened(object sender, RoutedEventArgs e)
     {
         Label2.Content = media.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
+        TreckSlider.Maximum = media.NaturalDuration.TimeSpan.Ticks;
     }
 
     private void Media_MediaEnded(object sender, RoutedEventArgs e)
@@ -154,7 +156,6 @@ public partial class MainWindow : Window
         }
 
         Lsongs.SelectedIndex = 0;
-        media.Source = new Uri(songsList[0]);
         Play();
     }
 
@@ -207,6 +208,7 @@ public partial class MainWindow : Window
 
     private void Forward()
     {
+        TreckSlider.Value = 0;
         if (Lsongs.SelectedIndex < Lsongs.Items.Count - 1)
         {
             media.Stop();
@@ -223,6 +225,7 @@ public partial class MainWindow : Window
 
     private void Back()
     {
+        TreckSlider.Value = 0;
         if (Lsongs.SelectedIndex == 0)
         {
             media.Stop();
@@ -252,7 +255,6 @@ public partial class MainWindow : Window
 
     private void ShuffleOn()
     {
-
         Random rnd = new Random();
         for (int i = songsList.Count - 1; i > 0; i--)
         {
@@ -268,6 +270,7 @@ public partial class MainWindow : Window
         {
             Lsongs.Items.Add(System.IO.Path.GetFileName(song));
         }
+
         Lsongs.SelectedIndex = 0;
         Play();
     }
@@ -281,7 +284,14 @@ public partial class MainWindow : Window
         {
             Lsongs.Items.Add(System.IO.Path.GetFileName(song));
         }
+
         Lsongs.SelectedIndex = 0;
         Play();
+    }
+
+
+    private void TreckSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        media.Position = new TimeSpan(Convert.ToInt64(TreckSlider.Value));
     }
 }
