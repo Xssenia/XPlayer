@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="660">
+        Title="MainWindow" Height="450" Width="660" Closed="MainWindow_OnClosed">
     <Grid Background="#413F42">
         <Grid.RowDefinitions>
             <RowDefinition Height="15"/>
@@ -44,6 +44,10 @@
             x:Name="ImageBox"
             Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="11" 
             Source="Img.png" Margin="0,20,50,70" />
+        <TextBlock Grid.ColumnSpan="11" Grid.Column="2" Grid.Row="1"
+                   VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                   Margin="0,0,50,30" Text="Song name"
+                   x:Name="Sname"/>
         <ListBox
             x:Name="Lsongs"
             Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="12"
@@ -58,7 +62,7 @@
             HorizontalContentAlignment="Center"
             Background="#85CDFD" 
             Foreground="Black"
-            Margin="7,7,7,5"/>
+            Margin="7,6,7,6"/>
         <Border Grid.Column="12" Grid.Row="2" Background="#85CDFD" CornerRadius="3" Margin="5"/>
         <Label 
             x:Name="Label2"
@@ -67,7 +71,7 @@
             Grid.Column="12" Grid.Row="2"
             Background="#85CDFD" 
             Foreground="Black"
-            Margin="7,7,7,5"/>
+            Margin="7,6,7,6"/>
         <Slider
             x:Name="TreckSlider"
             Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="9"
@@ -138,7 +142,8 @@
             x:Name="VolumeSlider"
             VerticalAlignment="Center"
             Background="#85CDFD"  
-            Grid.Column="10" Grid.Row="3"/>
+            Grid.Column="10" Grid.Row="3"
+            ValueChanged="VolumeSlider_ValueChanged"/>
         <ui:SymbolIcon 
             Symbol="Speaker216"
             Grid.Column="9" Grid.Row="3"

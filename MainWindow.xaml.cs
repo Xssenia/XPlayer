@@ -1,23 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 
 namespace XMusic;
 
@@ -34,6 +24,20 @@ public partial class MainWindow : Window
         ShuffleOffButton.Visibility = Visibility.Hidden;
         TreckButton.Visibility = Visibility.Hidden;
 
+        TrdStart();
+    }
+
+    private void TrdStart()
+    {
+        Thread t = new Thread(_ =>
+        {
+            while (true)
+            {
+                this.Dispatcher.Invoke(() => { TreckSlider.Value = media.Position.Ticks; });
+                Thread.Sleep(1000);
+            }
+        });
+        t.Start();
     }
 
     private string[] files;
@@ -118,6 +122,7 @@ public partial class MainWindow : Window
     private void Media_MediaOpened(object sender, RoutedEventArgs e)
     {
         Label2.Content = media.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
+        TreckSlider.Value = 0;
         TreckSlider.Maximum = media.NaturalDuration.TimeSpan.Ticks;
     }
 
@@ -133,7 +138,18 @@ public partial class MainWindow : Window
         }
     }
 
+    private void TreckSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        media.Position = new TimeSpan(Convert.ToInt64(TreckSlider.Value));
+        
+    }
 
+    private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        var n = e.NewValue;
+        var r = n / VolumeSlider.ActualWidth;
+        media.Volume = r * VolumeSlider.Maximum;
+    }
 
     private void ChoiceDir()
     {
@@ -155,6 +171,8 @@ public partial class MainWindow : Window
             }
         }
 
+        VolumeSlider.Value = VolumeSlider.Maximum;
+        media.Volume = VolumeSlider.Value;
         Lsongs.SelectedIndex = 0;
         Play();
     }
@@ -172,6 +190,9 @@ public partial class MainWindow : Window
     {
         PauseButton.Visibility = Visibility.Visible;
         PlayButton.Visibility = Visibility.Hidden;
+
+        string lsn = Lsongs.Items[Lsongs.SelectedIndex].ToString();
+        Sname.Text = lsn.Remove(lsn.Length - 4);
         media.Play();
 
         ShowImg();
@@ -282,16 +303,17 @@ public partial class MainWindow : Window
         songsList.Sort();
         foreach (var song in songsList)
         {
-            Lsongs.Items.Add(System.IO.Path.GetFileName(song));
+            Lsongs.Items.Add(Path.GetFileName(song));
         }
 
         Lsongs.SelectedIndex = 0;
         Play();
     }
 
-
-    private void TreckSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    private void MainWindow_OnClosed(object? sender, EventArgs e)
     {
-        media.Position = new TimeSpan(Convert.ToInt64(TreckSlider.Value));
+        media.Stop();
+        // тут поток остановить надо 
+        this.Dispatcher.Thread.Join();
     }
 }
